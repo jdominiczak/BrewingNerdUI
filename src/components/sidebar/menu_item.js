@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
-export default class MenuItem extends Component {
-  render() {
-    return (
-      <li><a href={this.props.link}><i className="fa fa-circle-o"></i> {this.props.name}</a></li>
-    )};
+export default function MenuItem(props){
+  return (
+    <li><a href={props.link}><i className="fa fa-circle-o"></i> {props.name}</a></li>
+  );
 }

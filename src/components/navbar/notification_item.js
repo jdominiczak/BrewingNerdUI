@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-export default class NotificationItem extends Component {
-  render() {
+export default function NotificationItem(props) {
+
     return (
       <li>
         <a href="#">
@@ -9,12 +9,12 @@ export default class NotificationItem extends Component {
             <img src="/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
           </div>
           <h4>
-            {this.props.title}
-            <small><i className="fa fa-clock-o"></i> {this.props.time}</small>
+            {props.title}
+            <small><i className="fa fa-clock-o"></i> {props.time}</small>
           </h4>
-          <p>{this.props.text}</p>
+          <p>{props.text}</p>
         </a>
       </li>
-    )};
+    );
 
 }
