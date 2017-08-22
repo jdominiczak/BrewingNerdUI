@@ -1,0 +1,7 @@
+.fa-large {
+  font-size: x-large !important;
+}
+
+.content-wrapper {
+  height:-webkit-fill-available;
+}
