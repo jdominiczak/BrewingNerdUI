@@ -8,7 +8,7 @@ export default class BodyContent extends Component {
       <section className="content">
 
         <div className="row">
-          Something
+          {this.props.text}
         </div>
       </section>
     )

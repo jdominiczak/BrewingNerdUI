@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
+
 
 import Header from './header';
 import BodyHeader from './body/body_header';
@@ -30,11 +32,12 @@ export default class App extends Component {
     let breadcrumbs = [{"name":"breadcrumb1", "link":"/test1"}, {"name":"breadcrumb2", "link":"/test2"}, {"name":"Last One", "active":"active"}]
 
     return (
+
       <div className={sidebarClass}>
         <Header sidebarCollapsed={this.state.sidebarCollapsed} toggleSidebar={this.toggleSidebar}/>
         <div className="content-wrapper">
           <BodyHeader headerTitle="Big Title" headerSmallTitle="Small Title" breadcrumbs={breadcrumbs}/>
-          <BodyContent />
+          <BodyContent text="test1"/>
         </div>
       </div>
 
