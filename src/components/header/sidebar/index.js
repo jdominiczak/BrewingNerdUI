@@ -12,7 +12,7 @@ export default class Sidebar extends Component {
           <div className="user-panel">
             <a href="#">
             <div className="pull-left image">
-              <i className="fa-large fa fa-user-circle-o" ></i>
+              <i className=" fa fa-user-circle-o fa-3x" ></i>
             </div>
           </a>
             <div className="pull-left info">

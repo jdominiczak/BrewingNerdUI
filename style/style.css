@@ -1,5 +1,9 @@
-.fa-large {
-  font-size: x-large !important;
+.fa-color-red {
+  color: #FF0000;
+}
+
+.fa-color-grey {
+  color: #6d6d6d;
 }
 
 .content-wrapper {
