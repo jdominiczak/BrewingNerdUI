@@ -9,3 +9,27 @@
 .content-wrapper {
   height:-webkit-fill-available;
 }
+
+.timeline-active a {
+  color: #fff;
+}
+
+.timeline > li.timeline-active > .timeline-item  {
+
+  background: #dd4b39;
+}
+
+.timeline > li.timeline-active > .timeline-item .timeline-body, .timeline-footer {
+
+  background: #fff;
+}
+
+
+.timeline > li.timeline-active > .timeline-item > .time {
+  color: #fff;
+}
+
+.timeline > li.timeline-active > i {
+  background: #dd4b39;
+  color: #fff;
+}

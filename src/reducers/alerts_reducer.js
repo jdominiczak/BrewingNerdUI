@@ -1,11 +1,19 @@
 import { FETCH_ALERTS } from '../actions/types';
 
-export default function(state = [], action) {
+const initialState = {
+  lastUpdated: 0,
+  alerts: []
+}
+
+
+export default function(state = initialState, action) {
   switch (action.type) {
     case FETCH_ALERTS:
-      console.log(action.payload.data);
-      return action.payload.data;
-      //return [action.payload.data, ...state];
+      //console.log(action.payload.data);
+      return Object.assign({}, state, {
+        alerts: action.payload.data,
+        lastUpdated: Date.now()
+      })
   }
   return state;
 }

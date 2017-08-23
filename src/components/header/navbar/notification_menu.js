@@ -95,7 +95,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    alerts: state.alerts
+    alerts: state.alerts.alerts
   };
 }
 
