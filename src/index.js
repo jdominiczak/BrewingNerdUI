@@ -12,6 +12,7 @@ const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 const store = createStoreWithMiddleware(reducers);
 
 //Kick off the fetch alerts on load
+
 store.dispatch(fetchAlerts())
 
 ReactDOM.render(

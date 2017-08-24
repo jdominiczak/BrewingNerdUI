@@ -1,4 +1,4 @@
-import { FETCH_ALERTS } from '../actions/types';
+import { FETCH_ALERTS, MODIFY_ALERT, DELETE_ALERT } from '../actions/types';
 
 const initialState = {
   lastUpdated: 0,
@@ -14,9 +14,39 @@ export default function(state = initialState, action) {
         alerts: action.payload.data,
         lastUpdated: Date.now()
       })
+    case MODIFY_ALERT:
+
+      let oldIndex = state.alerts.indexOf(state.alerts.find((value,index) => (value.url == action.payload.data.url) ? true : false))
+      //let oldData = newState.alerts.find((value,index) => (value.url == action.payload.data.url) ? true : false )
+      let newState = Object.assign({}, state, {
+        alerts: [...state.alerts.slice(0, oldIndex),
+                action.payload.data,
+                ...state.alerts.slice(oldIndex + 1)]
+      })
+
+
+      //newState.alerts.splice(newState.alerts.indexOf(oldData), 1)
+      //newState.alerts = newState.alerts.concat(action.payload.data)
+      return newState;
+    case DELETE_ALERT:
+      if(action.payload.status == 204) {  //204 means it was deleted
+        let oldIndex = state.alerts.indexOf(state.alerts.find((value,index) => (value.url == action.payload.request.responseURL) ? true : false ))
+        newState = Object.assign({}, state,  {
+          alerts: [...state.alerts.slice(0, oldIndex),
+                    ...state.alerts.slice(oldIndex + 1) ]
+
+        })
+        return newState;
+      }
+      else {
+        // TODO: Handle an error on deletion?
+        return state;
+      }
+    default:
+      return state;
   }
-  return state;
 }
+
 
 
 /**

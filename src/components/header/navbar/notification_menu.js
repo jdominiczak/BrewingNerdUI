@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchAlerts } from '../../../actions';
 import { sortArrayByProp } from '../../../util';
+import { Link } from 'react-router-dom';
 
 class NotificationMenu extends Component {
 
@@ -64,7 +65,7 @@ class NotificationMenu extends Component {
 
 
   render() {
-      console.log(sortArrayByProp("created_at",this.props.alerts));
+      //console.log(sortArrayByProp("created_at",this.props.alerts));
       //console.log(this.props.alerts);
       return (
         <li className="dropdown messages-menu">
@@ -82,7 +83,7 @@ class NotificationMenu extends Component {
                     {sortArrayByProp("created_at",this.props.alerts).map(this.renderAlert)}
                   </ul>
                 </li>
-                <li className="footer"><a href="#">See All Alerts</a></li>
+                <li className="footer"><Link to="/alerts">See All Alerts</Link></li>
               </ul>
             }
         </li>
