@@ -3,7 +3,7 @@ import NotificationItem from './notification_item';
 import onClickOutside from 'react-onclickoutside';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchAlerts } from '../../../actions';
+import { fetchAlertsIfNeeded } from '../../../actions';
 import { sortArrayByProp } from '../../../util';
 import { Link } from 'react-router-dom';
 
@@ -19,7 +19,8 @@ class NotificationMenu extends Component {
     this.setState(prevState => ({
       isNotificationMenuVisible: !prevState.isNotificationMenuVisible
     }));
-    this.props.fetchAlerts();
+
+    this.props.dispatch(fetchAlertsIfNeeded());
   }
 
   handleClickOutside = evt => {
@@ -65,8 +66,6 @@ class NotificationMenu extends Component {
 
 
   render() {
-      //console.log(sortArrayByProp("created_at",this.props.alerts));
-      //console.log(this.props.alerts);
       return (
         <li className="dropdown messages-menu">
           <a href="#" className="dropdown-toggle" onClick={this.toggleMenu}>
@@ -90,14 +89,10 @@ class NotificationMenu extends Component {
       )};
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchAlerts }, dispatch);
-}
-
 function mapStateToProps(state) {
   return {
     alerts: state.alerts.alerts
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(onClickOutside(NotificationMenu));
+export default connect(mapStateToProps)(onClickOutside(NotificationMenu));

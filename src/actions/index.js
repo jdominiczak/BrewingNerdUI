@@ -1,8 +1,11 @@
 import axios from 'axios';
-import { FETCH_ALERTS, MODIFY_ALERT, DELETE_ALERT } from './types';
+import { FETCH_ALERTS, MODIFY_ALERT, DELETE_ALERT, REQUEST_ALERTS, RECEIVE_ALERTS } from './types';
 
 
-
+function logThis(object) {
+  console.log(object);
+  return object
+}
 
 
 
@@ -11,26 +14,74 @@ import { FETCH_ALERTS, MODIFY_ALERT, DELETE_ALERT } from './types';
 *   Alert Actions
 *
 **/
-export function fetchAlerts() {
-  const request = axios.get('http://127.0.0.1:8000/alerts/');
+
+
+
+function requestAlerts() {
   return {
-    type: FETCH_ALERTS,
-    payload: request
-  };
+    type: REQUEST_ALERTS
+  }
+}
+
+function receiveAlerts(response) {
+  return {
+    type: RECEIVE_ALERTS,
+    alerts: response,
+    receivedAt: Date.now()
+  }
+}
+
+function fetchAlerts() {
+  return dispatch => {
+    dispatch(requestAlerts())
+    return axios.get('http://127.0.0.1:8000/alerts/')
+      .then(response => dispatch(receiveAlerts(response.data)))
+  }
+}
+
+function shouldFetchAlerts(state) {
+  //Debounce time of every 5 Seconds
+  if( (Date.now() - state.alerts.lastUpdated) > 5000){
+    return true
+  } else {
+    return false
+  }
+}
+
+export function fetchAlertsIfNeeded() {
+  return (dispatch, getState) => {
+    if (shouldFetchAlerts(getState())) {
+      return dispatch(fetchAlerts())
+    }
+  }
 }
 
 export function modifyAlert(url, object) {
-  const request = axios.patch(url, object);
+  return dispatch => {
+    return axios.patch(url, object)
+    .then(response => dispatch(modifyAlertReceived(response)))
+  }
+}
+
+
+function modifyAlertReceived(response) {
   return {
     type: MODIFY_ALERT,
-    payload:request
+    payload: response
   };
 }
 
 export function deleteAlert(url) {
-  const request = axios.delete(url);
+  return dispatch => {
+    return axios.delete(url)
+    .then(response => dispatch(deleteAlertReceived(response)))
+  }
+}
+
+function deleteAlertReceived(response) {
+
   return {
     type: DELETE_ALERT,
-    payload:request
+    payload:response
   };
 }
