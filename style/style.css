@@ -38,3 +38,12 @@
 .btn-left-margin {
   margin-left: 5px;
 }
+
+
+.dl-horizontal-narrow dt {
+  width: 75px !important;
+}
+
+.dl-horizontal-narrow dd {
+  margin-left: 85px !important;
+}

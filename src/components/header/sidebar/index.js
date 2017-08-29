@@ -21,12 +21,13 @@ export default class Sidebar extends Component {
           </div>
           <ul className="sidebar-menu">
             <li className="header">MAIN MENU</li>
-            { /*<MenuContainer name="Recipe" status="active" icon="fa-files-o" children={[{name: "Child 1", link: "#"}, {name: "Child 2", link: "#"}]}/>  */}
-            <MenuContainer name="Recipe" icon="fa-files-o" children={[{name: "Child 1", link: "#"}, {name: "Child 2", link: "#"}]}/>
-            <MenuContainer name="Ingredients" icon="fa-files-o" link="testLink.html"/>
-            <MenuContainer name="Fermenter" icon="fa-files-o" children={[{name: "Child 1", link: "#"}, {name: "Child 2", link: "#"}]}/>
-            <MenuContainer name="Kegerator" icon="fa-files-o" link="testLink.html"/>
-            <MenuContainer name="Devices" icon="fa-files-o" link="testLink.html"/>
+            <MenuContainer name="Dashboard" icon="fa-tachometer" Link="/"/>
+            <MenuContainer name="Recipe" icon="fa-book" children={[{name: "Child 1", link: "#"}, {name: "Child 2", link: "#"}]}/>
+            <MenuContainer name="Ingredients" icon="fa-balance-scale" link="#"/>
+            <MenuContainer name="Fermenter" icon="fa-industry" children={[{name: "Child 1", link: "#"}, {name: "Child 2", link: "#"}]}/>
+            <MenuContainer name="Kegerator" icon="fa-beer" link="#"/>
+            <MenuContainer name="Devices" icon="fa-microchip" link="#"/>
+            <MenuContainer name="Alerts" icon='fa-exclamation-triangle' link="/alerts" />
           </ul>
         </section>
       </aside>

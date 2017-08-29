@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import App from './components/app';
 import configureStore from './configure_store'
 //import reducers from './reducers';
-import { fetchAlertsIfNeeded } from './actions';
+import { fetchAlertsIfNeeded } from './actions/alert_actions';
 
 const store = configureStore()
 

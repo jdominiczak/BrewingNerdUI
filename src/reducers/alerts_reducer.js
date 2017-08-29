@@ -1,9 +1,11 @@
 import { REQUEST_ALERTS, RECEIVE_ALERTS, MODIFY_ALERT, DELETE_ALERT } from '../actions/types';
+import { normalizeArray } from '../util';
+import _ from 'lodash';
 
 const initialState = {
   lastUpdated: 0,
   isFetching: false,
-  alerts: []
+  alerts: {}
 }
 
 
@@ -12,36 +14,37 @@ export default function(state = initialState, action) {
 
 
     case MODIFY_ALERT:
-      let oldIndex = state.alerts.indexOf(state.alerts.find((value,index) => (value.url == action.payload.data.url) ? true : false))
-      //let oldData = newState.alerts.find((value,index) => (value.url == action.payload.data.url) ? true : false )
-      let newState = Object.assign({}, state, {
-        alerts: [...state.alerts.slice(0, oldIndex),
-                action.payload.data,
-                ...state.alerts.slice(oldIndex + 1)]
+      let newAlerts = Object.assign({}, state.alerts)
+      newAlerts[action.payload.data.id] = action.payload.data
+      return Object.assign({}, state, {
+        alerts: newAlerts
       })
       return newState;
 
     case DELETE_ALERT:
       if(action.payload.status == 204) {  //204 means it was deleted
-        let oldIndex = state.alerts.indexOf(state.alerts.find((value,index) => (value.url == action.payload.request.responseURL) ? true : false ))
-        newState = Object.assign({}, state,  {
-          alerts: [...state.alerts.slice(0, oldIndex),
-                    ...state.alerts.slice(oldIndex + 1) ]
+        let oldAlert = _.omit(state.alerts, (value, key, object) => {
+          if (value.url == action.payload.request.responseURL ) {
+            return true;
+          }
         })
-        return newState;
+        return Object.assign({}, state,  {
+          alerts: oldAlert
+        })
       }
       else {
         // TODO: Handle an error on deletion?
         return state;
       }
-      case REQUEST_ALERTS:
+    case REQUEST_ALERTS:
         return Object.assign({}, state, {
           isFetching: true
         })
-      case RECEIVE_ALERTS:
+    case RECEIVE_ALERTS:
+        newAlerts = normalizeArray(action.alerts, "id")
         return Object.assign({}, state, {
           isFetching: false,
-          alerts: action.alerts,
+          alerts: newAlerts,
           lastUpdated: action.receivedAt
         })
     default:

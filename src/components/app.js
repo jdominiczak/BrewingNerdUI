@@ -9,6 +9,7 @@ import BodyContent from './body/body_content';
 import Dashboard from './body/dashboard';
 import Recipes from './body/recipes';
 import Alerts from './body/alerts';
+import AlertDetail from './body/alerts/alert_detail'
 
 export default class App extends Component {
 
@@ -16,12 +17,14 @@ export default class App extends Component {
 
     return (
       <BrowserRouter>
-        <div>
+        <div className="wrapper">
           <Header>
             <Switch>
               <Route path="/" exact component={Dashboard} />
               <Route path="/recipes" component={Recipes} />
-              <Route path="/alerts" component={Alerts} />
+              <Route path="/alerts/:alertID" component={AlertDetail} />
+              <Route path="/alerts" exact component={Alerts} />
+
               <Redirect to="/" />
             </Switch>
           </Header>

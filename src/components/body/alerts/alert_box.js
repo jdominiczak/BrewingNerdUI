@@ -1,0 +1,79 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+
+/*
+* Alert Box inputs: title, time, created, modified, resolved, type,
+*                   description, sourceLink, sourceText, acknowledged,
+*        functions: toggleAlert(), deleteAlert()
+*/
+
+export default function AlertBox(props) {
+  if (props.loading) {
+    return (
+      <div className="col-md-12">
+            <div className="box box-danger">
+              <div className="box-header with-border">
+                <h3 className="box-title">Loading</h3>
+              </div>
+              <div className="box-body no-padding">
+              </div>
+             <div className="overlay">
+               <i className="fa fa-refresh fa-spin"></i>
+             </div>
+            </div>
+          </div>
+    )
+  } else {
+    console.log(props)
+  return (
+    <div className="col-md-12">
+          <div className="box box-danger">
+            <div className="box-header with-border">
+              <h3 className="box-title">{props.title}</h3>
+              <div className="pull-right"><span className="time"><i className="fa fa-clock-o"></i> {props.time}</span></div>
+            </div>
+            <div className="box-body no-padding">
+              <div className="row">
+                <div className='col-md-4'>
+
+                  <div className="pad box-pane">
+                    <dl className="dl-horizontal dl-horizontal-narrow">
+                      <dt>Status</dt>
+                      <dd>{props.active ? "Acknowledged" : "New"}</dd>
+                      <dt>Created</dt>
+                      <dd>{props.created}</dd>
+                      <dt>Modified</dt>
+                      <dd>{props.modified}</dd>
+                      <dt>Resolved</dt>
+                      <dd>{props.resolved}</dd>
+                      <dt>Type</dt>
+                      <dd>{props.type}</dd>
+                    </dl>
+                  </div>
+                </div>
+                <div className="col-md-8">
+                  <div className="pad">
+                    <p>{props.description}</p>
+
+                    <p>Source: <Link to={props.sourceLink || "#"}>{props.sourceText}</Link> </p>
+                  </div>
+                </div>
+            </div>
+            <div className="row">
+              <div className='col-md-12'>
+                <div className="pad">
+                  {!props.active ?
+                    <a className="btn btn-success btn-xs" onClick={() => props.toggleAlert(props.url, true)}>Acknowledge Alert</a> :
+                    <a className="btn btn-warning btn-xs" onClick={() => props.toggleAlert(props.url, false)}>Reset Alert</a>
+                  }
+                    <a className="btn btn-danger btn-xs pull-right" onClick={() => props.deleteAlert(props.id)}>Delete Alert</a>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      )
+  }
+}

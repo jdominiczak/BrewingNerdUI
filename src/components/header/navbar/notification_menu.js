@@ -3,9 +3,11 @@ import NotificationItem from './notification_item';
 import onClickOutside from 'react-onclickoutside';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchAlertsIfNeeded } from '../../../actions';
+import { fetchAlertsIfNeeded } from '../../../actions/alert_actions';
 import { sortArrayByProp } from '../../../util';
 import { Link } from 'react-router-dom';
+
+import _ from 'lodash';
 
 class NotificationMenu extends Component {
 
@@ -13,7 +15,18 @@ class NotificationMenu extends Component {
     super(props);
     this.state = {isNotificationMenuVisible: false};
     this.toggleMenu = this.toggleMenu.bind(this);
+
   }
+
+
+  componentDidMount() {
+    this.alert_refresh = setInterval(() => this.props.dispatch(fetchAlertsIfNeeded()), 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.alert_refresh)
+  }
+
 
   toggleMenu() {
     this.setState(prevState => ({
@@ -66,20 +79,21 @@ class NotificationMenu extends Component {
 
 
   render() {
+    let alerts = sortArrayByProp("created_at",this.props.alerts)
       return (
         <li className="dropdown messages-menu">
           <a href="#" className="dropdown-toggle" onClick={this.toggleMenu}>
             <i className="fa fa-exclamation-triangle"></i>
-            {this.props.alerts.length > 0 &&
-              <span className="label label-danger">{this.props.alerts.length}</span>
+            {alerts.length > 0 &&
+              <span className="label label-danger">{alerts.length}</span>
             }
           </a>
             {this.state.isNotificationMenuVisible &&
               <ul className="dropdown-menu" style={{display:"block"}}>
-                <li className="header">You have {this.props.alerts.length} alerts</li>
+                <li className="header">You have {alerts.length} alerts</li>
                 <li>
                   <ul className="menu">
-                    {sortArrayByProp("created_at",this.props.alerts).map(this.renderAlert)}
+                    {alerts.map(this.renderAlert)}
                   </ul>
                 </li>
                 <li className="footer"><Link to="/alerts">See All Alerts</Link></li>

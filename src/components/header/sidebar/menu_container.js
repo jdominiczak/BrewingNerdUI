@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { Link } from 'react-router-dom';
 import MenuItem from './menu_item';
 
 export default class MenuContainer extends Component {
@@ -28,24 +29,32 @@ export default class MenuContainer extends Component {
       var liClass = ( this.state.isMenuVisible ? "treeview menu-open" : "treeview")
     }
 
-    return (
-        <li className={liClass} >
-        <a href={this.props.link || "#"} onClick={this.toggleMenu} >
-
-          <i className={"fa " + this.props.icon}></i> <span>{this.props.name}</span>
-          {this.props.children.length > 0 &&
-          <span className="pull-right-container">
-            <i className="fa fa-angle-left pull-right"></i>
-          </span>
-          }
-        </a>
-        {this.state.isMenuVisible &&
-        <ul className="treeview-menu">
-          {this.props.children.map((child) => <MenuItem key={child.name} name={child.name} link={child.link}/>)}
-        </ul>
-        }
-      </li>
-    )};
+    if(this.props.children.length > 0) {
+      return (
+          <li className={liClass} >
+            <a href="#" onClick={this.toggleMenu} >
+              <i className={"fa " + this.props.icon}></i> <span>{this.props.name}</span>
+                <span className="pull-right-container">
+                  <i className="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            {this.state.isMenuVisible &&
+              <ul className="treeview-menu">
+                {this.props.children.map((child) => <MenuItem key={child.name} name={child.name} link={child.link}/>)}
+              </ul>
+            }
+        </li>
+      )
+    } else {
+      return (
+          <li className={liClass} >
+          <Link to={this.props.link || "/"}  >
+            <i className={"fa " + this.props.icon}></i> <span>{this.props.name}</span>
+          </Link>
+        </li>
+      )
+    }
+  }
 }
 
 MenuContainer.defaultProps = {
