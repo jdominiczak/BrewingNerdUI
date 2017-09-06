@@ -20,7 +20,9 @@ class NotificationMenu extends Component {
 
 
   componentDidMount() {
-    this.alert_refresh = setInterval(() => this.props.dispatch(fetchAlertsIfNeeded()), 10000);
+
+    // TODO: This needs to be uncommented for production
+    //this.alert_refresh = setInterval(() => this.props.dispatch(fetchAlertsIfNeeded()), 10000);
   }
 
   componentWillUnmount() {

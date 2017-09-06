@@ -44,4 +44,14 @@ export default class BnDate {
     return this.toPrettyDate(dateTime) + " " + this.toPrettyTime(dateTime)
   }
 
+
+  // Return an array with [year, month, day, hour, min ] between them
+  static diffDate(date1, date2) {
+    //console.log(date1, date2)
+    //let diff = date2 - date1  //diff in ms
+    //let yearDiff = date2.getFullYear()-date1.getFullYear()
+    return[date2.getFullYear()-date1.getFullYear(), date2.getMonth()-date1.getMonth(), date2.getDate()-date1.getDate(), date2.getHours()-date1.getHours(), date2.getMinutes()-date1.getMinutes()]
+
+  }
+
 }

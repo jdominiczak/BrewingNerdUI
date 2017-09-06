@@ -18,7 +18,6 @@ export default class Header extends Component {
 
   updateWindowHeight() {
     this.setState( { windowHeight: window.innerHeight });
-    console.log("Updating Height");
   }
 
   componentDidMount() {
