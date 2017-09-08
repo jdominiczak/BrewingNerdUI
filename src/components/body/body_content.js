@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function BodyContent(props) {
   return (
@@ -7,3 +8,11 @@ export default function BodyContent(props) {
     </section>
   );
 }
+
+BodyContent.propTypes = {
+  children: PropTypes.element,
+};
+
+BodyContent.defaultProps = {
+  children: null,
+};

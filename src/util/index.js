@@ -1,47 +1,36 @@
-import _ from 'lodash'
+import _ from 'lodash';
 
-export function sortArrayByProp(prop,array, ascending=false) {
-  let arr = _.values(array)
-  //console.log(arr)
-  //let arr = array.slice();
-  if(ascending) {
-  arr.sort(function (a, b) {
-        if (a[prop] < b[prop]) {
-            return -1;
-        } else if (a[prop] > b[prop]) {
-            return 1;
-        } else {
-            return 0;
-        }
+export function sortArrayByProp(prop, array, ascending = false) {
+  const arr = _.values(array);
+  if (ascending) {
+    arr.sort((a, b) => {
+      if (a[prop] < b[prop]) {
+        return -1;
+      } else if (a[prop] > b[prop]) {
+        return 1;
+      }
+      return 0;
     });
     return arr;
   }
-  else {
-    arr.sort(function (a, b) {
-          if (a[prop] > b[prop]) {
-              return -1;
-          } else if (a[prop] < b[prop]) {
-              return 1;
-          } else {
-              return 0;
-          }
-      });
-      return arr;
-  }
-};
-
-export function normalizeArray(array, idProperty) {
-  //console.log(array)
-  let newObject = {}
-  array.forEach( function (item) {
-    //console.log(item, idProperty)
-    newObject[item[idProperty]] = item
-  })
-  return newObject
+  arr.sort((a, b) => {
+    if (a[prop] > b[prop]) {
+      return -1;
+    } else if (a[prop] < b[prop]) {
+      return 1;
+    }
+    return 0;
+  });
+  return arr;
 }
 
-
-
+export function normalizeArray(array, idProperty) {
+  const newObject = {};
+  array.forEach((item) => {
+    newObject[item[idProperty]] = item;
+  });
+  return newObject;
+}
 
 /*
 def gallonsToLiters(gallons):

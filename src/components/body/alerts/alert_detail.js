@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 
 import { modifyAlert, deleteAlert } from '../../../actions/alert_actions';
@@ -9,16 +9,13 @@ import { modifyAlert, deleteAlert } from '../../../actions/alert_actions';
 import BodyHeader from '../body_header';
 import BodyContent from '../body_content';
 import AlertBox from './alert_box';
-import BnDate from "../../../util/date"
+import BnDate from '../../../util/bn_date';
 
 class AlertDetail extends Component {
-
   constructor(props) {
     super(props);
     this.toggleAlert = this.toggleAlert.bind(this);
   }
-
-
 
   /*
   * Alert Box inputs: title, time, created, modified, resolved, type,
@@ -26,24 +23,23 @@ class AlertDetail extends Component {
   *        functions: toggleAlert(), deleteAlert()
   */
   toggleAlert(alertURL, acknowledged) {
-    let data = { acknowledged: acknowledged }
+    const data = { acknowledged };
     this.props.modifyAlert(alertURL, data);
   }
 
 
-  renderAlertBox(alertID) {
-    let alert = this.props.alerts[this.props.match.params.alertID];
-    console.log(alert)
-    if (alert === undefined)
-    {
+  renderAlertBox() {
+    const alert = this.props.alerts[this.props.match.params.alertID];
+    // console.log(alert)
+    if (alert === undefined) {
       return (
-        <AlertBox loading={true}/>
-      )
+        <AlertBox loading />
+      );
     }
     return (
       <AlertBox
         title={alert.title}
-        resolved={alert.resolved_timestamp=== null ? "No" : "Yes"}
+        resolved={alert.resolved_timestamp === null ? 'No' : 'Yes'}
         type={alert.type}
         description={alert.description}
         acknowledged={alert.acknowledged}
@@ -56,27 +52,29 @@ class AlertDetail extends Component {
         sourceText={alert.target}
         url={alert.url}
       />
-    )
+    );
   }
 
 
   render() {
-    let breadcrumbs = [{"name":"Home", "link":"/"}, {"name":"Alerts", "link":"/alerts"},{"name":"Alert Detail"}]
+    const breadcrumbs = [{ name: 'Home', link: '/' },
+      { name: 'Alerts', link: '/alerts' },
+      { name: 'Alert Detail' }];
     return (
       <div>
-        <BodyHeader headerTitle="Alerts" headerSmallTitle="" breadcrumbs={breadcrumbs}/>
+        <BodyHeader headerTitle="Alerts" headerSmallTitle="" breadcrumbs={breadcrumbs} />
         <BodyContent>
-           {this.renderAlertBox(this.props.match.params.alertID)}
+          {this.renderAlertBox()}
         </BodyContent>
       </div>
-  )};
-
+    );
+  }
 }
 
 
 function mapStateToProps(state) {
   return {
-    alerts: state.alerts.alerts
+    alerts: state.alerts.alerts,
   };
 }
 
@@ -85,3 +83,19 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlertDetail);
+
+AlertDetail.propTypes = {
+  modifyAlert: PropTypes.func.isRequired,
+  alerts: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      alertID: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
+AlertDetail.defaultProps = {
+
+};

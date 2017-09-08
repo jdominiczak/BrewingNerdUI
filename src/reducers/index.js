@@ -4,7 +4,7 @@ import RecipesReducer from './recipes_reducer';
 
 const rootReducer = combineReducers({
   alerts: AlertReducer,
-  recipes: RecipesReducer
+  recipes: RecipesReducer,
 });
 
 export default rootReducer;

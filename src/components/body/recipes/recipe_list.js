@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { sortArrayByProp } from '../../../util';
 import { getRecipeStatus } from '../../../util/recipe_util';
-import BnDate from '../../../util/date';
-import { setSelectedRecipe, fetchRecipesIfNeeded } from '../../../actions/recipe_actions'
-import {withRouter} from 'react-router-dom';
-
+import BnDate from '../../../util/bn_date';
+import { setSelectedRecipe, fetchRecipesIfNeeded } from '../../../actions/recipe_actions';
 
 class RecipeList extends Component {
-
   constructor(props) {
     super(props);
-    this.state = {sortByProperty: "created_at", sortByAscending: false};
+    this.state = { sortByProperty: 'created_at', sortByAscending: false };
     this.setSort = this.setSort.bind(this);
     this.setSelectedRecipe = this.setSelectedRecipe.bind(this);
   }
@@ -23,38 +21,50 @@ class RecipeList extends Component {
   }
 
   setSort(sortBy) {
-    if (this.state.sortByProperty == sortBy) {
+    if (this.state.sortByProperty === sortBy) {
       // just toggle ascending
       this.setState(prevState => ({
-        sortByAscending: !prevState.sortByAscending
+        sortByAscending: !prevState.sortByAscending,
       }));
     } else {
-      this.setState(prevState => ({
+      this.setState({
         sortByProperty: sortBy,
-        sortByAscending: false
-      }))
-    }
-  }
-  renderArrow(property) {
-    if (this.state.sortByProperty == property ) {
-      if (this.state.sortByAscending) {
-        return ' \u2191';
-      }
-      else {
-        return ' \u2193'
-      }
-    }
-    else {
-      return ""
+        sortByAscending: false,
+      });
     }
   }
 
   setSelectedRecipe(url, id) {
     this.props.setSelectedRecipe(url);
-    this.props.history.push('/recipes/' + id);
+    this.props.history.push(`/recipes/${id}`);
   }
 
-  render () {
+  renderArrow(property) {
+    if (this.state.sortByProperty === property) {
+      if (this.state.sortByAscending) {
+        return ' \u2191';
+      }
+      return ' \u2193';
+    }
+    return '';
+  }
+
+  renderRow(recipe) {
+    return (
+      <tr
+        key={recipe.id}
+        onClick={() => this.setSelectedRecipe(recipe.url, recipe.id)}
+      >
+        <td>{recipe.name}</td>
+        <td>{recipe.type}</td>
+        <td>{getRecipeStatus(recipe)}</td>
+        <td>{BnDate.toPrettyDateTime(new Date(recipe.created_at))}</td>
+        <td>{BnDate.toPrettyDateTime(new Date(recipe.modified_at))}</td>
+      </tr>
+    );
+  }
+
+  render() {
     return (
       <div className="row">
         <div className="col-md-12">
@@ -73,28 +83,24 @@ class RecipeList extends Component {
               <table className="table table-hover">
                 <tbody>
                   <tr>
-                    <th onClick={() => this.setSort("name")}>Name{this.renderArrow("name")}</th>
-                    <th onClick={() => this.setSort("type")}>Type{this.renderArrow("type")}</th>
+                    <th onClick={() => this.setSort('name')}>Name{this.renderArrow('name')}</th>
+                    <th onClick={() => this.setSort('type')}>Type{this.renderArrow('type')}</th>
                     <th>Status</th>
-                    <th onClick={() => this.setSort("created_at")}>Created At{this.renderArrow("created_at")}</th>
-                    <th onClick={() => this.setSort("modified_at")}>Last Modified{this.renderArrow("modified_at")}</th>
+                    <th onClick={() => this.setSort('created_at')}>Created At{this.renderArrow('created_at')}</th>
+                    <th onClick={() => this.setSort('modified_at')}>Last Modified{this.renderArrow('modified_at')}</th>
                   </tr>
-                  {sortArrayByProp(this.state.sortByProperty,this.props.recipes, this.state.sortByAscending).map(recipe =>
-                    <tr key={recipe.id} onClick={() => this.setSelectedRecipe(recipe.url, recipe.id)}>
-                      <td>{recipe.name}</td>
-                      <td>{recipe.type}</td>
-                      <td>{getRecipeStatus(recipe)}</td>
-                      <td>{BnDate.toPrettyDateTime(new Date(recipe.created_at))}</td>
-                      <td>{BnDate.toPrettyDateTime(new Date(recipe.modified_at))}</td>
-                    </tr>
-                  )}
-              </tbody>
+                  {sortArrayByProp(this.state.sortByProperty,
+                    this.props.recipes,
+                    this.state.sortByAscending)
+                    .map(recipe => this.renderRow(recipe))
+                  }
+                </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -104,49 +110,17 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    recipes: state.recipes.recipes
+    recipes: state.recipes.recipes,
   };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(RecipeList));
 
-
-/*
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-
-import { connect } from 'react-redux';
-import { fetchRecipesIfNeeded } from '../../../actions/recipe_actions';
-import  RecipeListTable  from './recipe_list_table';
-
-class RecipeList extends Component {
-
-  componentDidMount() {
-    this.props.dispatch(fetchRecipesIfNeeded())
-  }
-
-  render () {
-    return (
-      <div>
-        <RecipeListTable recipes={this.props.recipes}/>
-      </div>
-    )
-  }
-
-
-}
-
-function mapStateToProps(state) {
-  return {
-    recipes: state.recipes.recipes
-  };
-}
-
-/*
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ modifyAlert, deleteAlert }, dispatch);
-}
-*/
-/*
-export default connect(mapStateToProps)(RecipeList);
-*/
+RecipeList.propTypes = {
+  fetchRecipesIfNeeded: PropTypes.func.isRequired,
+  setSelectedRecipe: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  recipes: PropTypes.shape({}).isRequired,
+};

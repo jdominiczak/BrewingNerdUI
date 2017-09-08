@@ -1,44 +1,46 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import DateLineChart from '../elements/charts/date_line_chart';
 import Units from '../../../util/units';
 
 function generateMashData(recipe) {
-  //console.log(mash)
-  let startDate = Date.now();
+  // console.log(mash)
+  let startDate = new Date(Date.now());
   if (recipe.date) {
-    startDate = new Date(recipe.date)
+    startDate = new Date(recipe.date);
   }
-  let dataArray = []
+  const dataArray = [];
 
-  //loop through the fermentation steps
-  let steps = recipe.fermentation_profile.fermentation_steps
-  console.log(steps)
-  for(let step of steps) {
-    console.log(step)
-    //start Temp
-    dataArray.push({x: startDate, y:Units.celsiusToFahrenheit(step.start_temp)})
-    //end temp
-    //add the length to startDate
-    startDate = new Date(startDate.getTime() + (step.length * 1000*60*60*24))
-    dataArray.push({x: startDate, y:Units.celsiusToFahrenheit(step.end_temp)})
-  }
+  // loop through the fermentation steps
+  const steps = recipe.fermentation_profile.fermentation_steps;
+  // console.log(steps);
+  steps.forEach((step) => {
+    // for (let step of steps) {
+    // console.log(step)
+    // start Temp
+    dataArray.push({ x: startDate, y: Units.celsiusToFahrenheit(step.start_temp) });
+    // end temp
+    // add the length to startDate
+    startDate = new Date(startDate.getTime() + (step.length * 1000 * 60 * 60 * 24));
+    dataArray.push({ x: startDate, y: Units.celsiusToFahrenheit(step.end_temp) });
+  });
+
   if (recipe.age_temp && recipe.age) {
     // Handle the Aging Process
-    dataArray.push({x: startDate, y:Units.celsiusToFahrenheit(recipe.age_temp)})
-    //add the length to startDate
-    startDate = new Date(startDate.getTime() + (recipe.age * 1000*60*60*24))
-    dataArray.push({x: startDate, y:Units.celsiusToFahrenheit(recipe.age_temp)})
+    dataArray.push({ x: startDate, y: Units.celsiusToFahrenheit(recipe.age_temp) });
+    // add the length to startDate
+    startDate = new Date(startDate.getTime() + (recipe.age * 1000 * 60 * 60 * 24));
+    dataArray.push({ x: startDate, y: Units.celsiusToFahrenheit(recipe.age_temp) });
   }
 
 
-  console.log(dataArray)
-  return dataArray
+  // console.log(dataArray)
+  return dataArray;
 }
 
 
 export default function RecipeFermentation(props) {
-  //console.log(props)
+  // console.log(props)
   return (
     <div>
       <div className="row">
@@ -56,32 +58,46 @@ export default function RecipeFermentation(props) {
                 <th>End</th>
                 <th>Length</th>
               </tr>
-              {props.recipe.fermentation_profile.fermentation_steps.map((step) => {
-                return (
+              {props.recipe.fermentation_profile.fermentation_steps.forEach((step) => {
+                const stepDiv = (
                   <tr key={step.order}>
                     <td>{step.name}</td>
                     <td>{Units.celsiusToFahrenheit(step.start_temp, 0)}</td>
                     <td>{Units.celsiusToFahrenheit(step.end_temp, 0)}</td>
                     <td>{step.length} Days</td>
-                  </tr>
-                )
-              })}
+                  </tr>);
+                return stepDiv;
+              }
+              )
+              }
 
-                <tr>
-                  <td>Bulk Age</td>
-                  <td>{props.recipe.age_temp ? Units.celsiusToFahrenheit(props.recipe.age_temp, 0) : "-"}</td>
-                  <td>{props.recipe.age_temp ? Units.celsiusToFahrenheit(props.recipe.age_temp, 0) : "-"}</td>
-                  <td>{props.recipe.age ? Number(props.recipe.age).toFixed(0) : "-"} Days</td>
-                </tr>
+              <tr>
+                <td>Bulk Age</td>
+                <td>{props.recipe.age_temp ? Units.celsiusToFahrenheit(props.recipe.age_temp, 0) : '-'}</td>
+                <td>{props.recipe.age_temp ? Units.celsiusToFahrenheit(props.recipe.age_temp, 0) : '-'}</td>
+                <td>{props.recipe.age ? Number(props.recipe.age).toFixed(0) : '-'} Days</td>
+              </tr>
 
             </tbody>
           </table>
         </div>
         <div className="form-group col-md-12 col-lg-8">
-          <DateLineChart data={generateMashData(props.recipe)}/>
+          <DateLineChart data={generateMashData(props.recipe)} />
         </div>
       </div>
     </div>
-  )
-
+  );
 }
+
+RecipeFermentation.propTypes = {
+  recipe: PropTypes.shape({
+    age: PropTypes.string,
+    age_temp: PropTypes.string,
+    fermentation_profile: PropTypes.shape({
+      name: PropTypes.string,
+      fermentation_steps: PropTypes.arrayOf(PropTypes.object),
+    }),
+  }).isRequired,
+};
+
+RecipeFermentation.defaultProps = {};

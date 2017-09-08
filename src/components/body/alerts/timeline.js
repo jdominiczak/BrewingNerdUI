@@ -1,9 +1,7 @@
 import React from 'react';
-import TimelineItem from './timeline_item';
-import TimelineDate from './timeline_date';
+import PropTypes from 'prop-types';
 
 export default function Timeline(props) {
-
   return (
     <ul className="timeline">
       {props.children}
@@ -17,3 +15,10 @@ export default function Timeline(props) {
 <TimelineItem active={true} title="Title" description="Description" time="12:12"/>
 <TimelineItem active={false} title="Title2" description="Description2" time="12:13"/>
 */
+Timeline.propTypes = {
+  children: PropTypes.element,
+};
+
+Timeline.defaultProps = {
+  children: null,
+};
