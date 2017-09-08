@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MODIFY_ALERT, DELETE_ALERT, REQUEST_ALERTS, RECEIVE_ALERTS } from './types';
+import { MODIFY_ALERT, DELETE_ALERT, REQUEST_ALERTS, RECEIVE_ALERTS, ERROR_FETCHING_ALERTS, SELECTED_ALERT } from './types';
 
 
 function requestAlerts() {
@@ -16,11 +16,44 @@ function receiveAlerts(response) {
   };
 }
 
+function errorSelectedRecipe() {
+  return {
+    type: ERROR_FETCHING_ALERTS,
+  };
+}
+
+export function setSelectedAlert(alert, id = -1) {
+  if (alert !== undefined) {
+    return {
+      type: SELECTED_ALERT,
+      selectedAlert: alert,
+      selectedAlertID: alert.id,
+    };
+  }
+  return {
+    type: SELECTED_ALERT,
+    selectedAlert: {},
+    selectedAlertID: id,
+  };
+}
+
+function getAlertByID(id, state) {
+  const alert = state.alerts[id];
+  return alert;
+}
+
+export function setSelectedAlertByID(id) {
+  return (dispatch, getState) => {
+    dispatch(setSelectedAlert(getAlertByID(id, getState()), id));
+  };
+}
+
 function fetchAlerts() {
   return (dispatch) => {
     dispatch(requestAlerts());
     return axios.get('http://127.0.0.1:8000/alerts/')
-      .then(response => dispatch(receiveAlerts(response.data)));
+      .then(response => dispatch(receiveAlerts(response.data)))
+      .catch(() => dispatch(errorSelectedRecipe()));
   };
 }
 

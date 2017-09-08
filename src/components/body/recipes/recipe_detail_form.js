@@ -169,11 +169,19 @@ export default function RecipeDetailForm(props) {
               <RecipeIngredients recipe={props.recipe} />
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-12">
-              <RecipeMash mash={props.recipe.mash_profile_usage} />
+          {props.recipe.mash_profile_usage !== null ?
+            <div className="row">
+              <div className="col-md-12">
+                <RecipeMash mash={props.recipe.mash_profile_usage} />
+              </div>
             </div>
-          </div>
+            :
+            <div className="row">
+              <div className="col-md-12">
+                <h4><strong>Mash Profile:</strong> None</h4>
+              </div>
+            </div>
+          }
           <div className="row">
             <div className="col-md-12">
               <RecipeFermentation recipe={props.recipe} />

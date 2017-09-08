@@ -25,6 +25,24 @@ export default function AlertBox(props) {
       </div>
     );
   }
+  if (props.error) {
+    return (
+      <div className="col-md-12">
+        <div className="box box-danger">
+          <div className="box-header with-border">
+            <h3 className="box-title">Error</h3>
+          </div>
+          <div className="box-body no-padding">
+            <div className="row">
+              <div className="col-md-12">
+                <h1 style={{ textAlign: 'center' }}>404 - Alert Not Found</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="col-md-12">
       <div className="box box-danger">
@@ -97,6 +115,7 @@ export default function AlertBox(props) {
 
 AlertBox.propTypes = {
   loading: PropTypes.bool,
+  error: PropTypes.bool,
   title: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
@@ -115,6 +134,7 @@ AlertBox.propTypes = {
 
 AlertBox.defaultProps = {
   loading: false,
+  error: false,
   created: '',
   modified: '',
   description: '',

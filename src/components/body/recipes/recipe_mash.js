@@ -21,6 +21,21 @@ function RecipeMashStep(props) {
 
 function RecipeSpargeStep(props) {
   //  console.log(props)
+  if (props.noSparge) {
+    return (
+      <tr>
+        <td>--</td>
+        <td>No Sparge</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+      </tr>
+    );
+  }
   return (
     <tr>
       <td>--</td>
@@ -70,7 +85,10 @@ export default function RecipeMash(props) {
                 <th>Amount</th>
               </tr>
               {props.mash.mash_steps.forEach(step => renderMashStep(step))}
-              <RecipeSpargeStep mash={props.mash} />
+              {(props.mash.sparge_volume !== null && props.mash.mash_profile.sparge_temp !== null) ?
+                <RecipeSpargeStep mash={props.mash} /> :
+                <RecipeSpargeStep noSparge />
+              }
             </tbody>
           </table>
         </div>
@@ -97,6 +115,7 @@ RecipeMashStep.propTypes = {
 };
 
 RecipeSpargeStep.propTypes = {
+  noSparge: PropTypes.bool,
   mash: PropTypes.shape({
     sparge_volume: PropTypes.string.isRequired,
     mash_profile: PropTypes.shape({
@@ -106,8 +125,13 @@ RecipeSpargeStep.propTypes = {
   }).isRequired,
 };
 
+RecipeSpargeStep.defaultProps = {
+  noSparge: false,
+};
+
 RecipeMash.propTypes = {
   mash: PropTypes.shape({
+    sparge_volume: PropTypes.string.isRequired,
     mash_profile: PropTypes.shape({
       name: PropTypes.string.isRequired,
       sparge_temp: PropTypes.string.isRequired,

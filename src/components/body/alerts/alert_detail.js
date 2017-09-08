@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 
-import { modifyAlert, deleteAlert } from '../../../actions/alert_actions';
+import { modifyAlert, deleteAlert, setSelectedAlertByID } from '../../../actions/alert_actions';
 
 
 import BodyHeader from '../body_header';
@@ -22,18 +22,29 @@ class AlertDetail extends Component {
   *                   description, sourceLink, sourceText, acknowledged,
   *        functions: toggleAlert(), deleteAlert()
   */
+
+
+  componentDidMount() {
+    this.props.setSelectedAlertByID(this.props.match.params.alertID);
+  }
+
   toggleAlert(alertURL, acknowledged) {
     const data = { acknowledged };
     this.props.modifyAlert(alertURL, data);
   }
 
-
   renderAlertBox() {
-    const alert = this.props.alerts[this.props.match.params.alertID];
+    // const alert = this.props.alerts[this.props.match.params.alertID];
     // console.log(alert)
-    if (alert === undefined) {
+    const alert = this.props.alerts.selectedAlert;
+    if (alert === {}) {
       return (
         <AlertBox loading />
+      );
+    }
+    if (this.props.alerts.errorSelectedAlert) {
+      return (
+        <AlertBox error />
       );
     }
     return (
@@ -74,20 +85,22 @@ class AlertDetail extends Component {
 
 function mapStateToProps(state) {
   return {
-    alerts: state.alerts.alerts,
+    alerts: state.alerts,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ modifyAlert, deleteAlert }, dispatch);
+  return bindActionCreators({ modifyAlert, deleteAlert, setSelectedAlertByID }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlertDetail);
 
 AlertDetail.propTypes = {
+  setSelectedAlertByID: PropTypes.func.isRequired,
   modifyAlert: PropTypes.func.isRequired,
   alerts: PropTypes.shape({
-    title: PropTypes.string.isRequired,
+    errorSelectedAlert: PropTypes.bool.isRequired,
+    selectedAlert: PropTypes.shape({}).isRequired,
   }).isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
