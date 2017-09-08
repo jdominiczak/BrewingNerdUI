@@ -8,6 +8,7 @@ export default class MenuContainer extends Component {
     return <MenuItem key={child.name} name={child.name} link={child.link} />;
   }
 
+
   constructor(props) {
     super(props);
     if (props.status === 'active') {
@@ -19,6 +20,10 @@ export default class MenuContainer extends Component {
   }
 
   toggleMenu() {
+    // if the menu is closed redirect them to the link
+    if (!this.state.isMenuVisible) {
+      this.context.router.history.push(this.props.link);
+    }
     this.setState(prevState => ({
       isMenuVisible: !prevState.isMenuVisible,
     }));
@@ -58,6 +63,10 @@ export default class MenuContainer extends Component {
     );
   }
 }
+
+MenuContainer.contextTypes = {
+  router: PropTypes.object,
+};
 
 MenuContainer.propTypes = {
   icon: PropTypes.string,

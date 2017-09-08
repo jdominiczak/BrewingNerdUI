@@ -27,6 +27,7 @@ export default function Sidebar() {
           <MenuContainer
             name="Recipe"
             icon="fa-book"
+            link="/recipes"
             childItem={[{ name: 'Child 1', link: '#' }, { name: 'Child 2', link: '#' }]}
           />
           <MenuContainer

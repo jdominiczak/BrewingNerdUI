@@ -88,7 +88,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(Alert);
 Alert.propTypes = {
   modifyAlert: PropTypes.func.isRequired,
   deleteAlert: PropTypes.func.isRequired,
-  alerts: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }).isRequired).isRequired,
+  alerts: PropTypes.PropTypes.shape({
+  }).isRequired,
 };

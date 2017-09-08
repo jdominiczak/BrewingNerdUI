@@ -16,7 +16,7 @@ export default function Timeline(props) {
 <TimelineItem active={false} title="Title2" description="Description2" time="12:13"/>
 */
 Timeline.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.arrayOf(PropTypes.element),
 };
 
 Timeline.defaultProps = {
