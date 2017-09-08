@@ -101,6 +101,7 @@ export default function (state = initialState, action) {
             isFetching: false,
             errorFetching: false,
             selectedAlert,
+            selectedAlertID: action.selectedAlertID,
             errorSelectedAlert: false,
           });
         } else if (state.isFetching) {

@@ -22,10 +22,14 @@ class AlertDetail extends Component {
   *                   description, sourceLink, sourceText, acknowledged,
   *        functions: toggleAlert(), deleteAlert()
   */
-
-
   componentDidMount() {
     this.props.setSelectedAlertByID(this.props.match.params.alertID);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.alertID !== this.props.match.params.alertID) {
+      this.props.setSelectedAlertByID(this.props.match.params.alertID);
+    }
   }
 
   toggleAlert(alertURL, acknowledged) {
@@ -81,7 +85,6 @@ class AlertDetail extends Component {
     );
   }
 }
-
 
 function mapStateToProps(state) {
   return {
